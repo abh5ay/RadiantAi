@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chest Analysis Bundle | Sentinel SP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: { colors: { primary: '#1d4ed8', dark: '#0c1622' } }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#081018] text-white flex min-h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-[#0b1220] border-r border-slate-800 p-6 flex flex-col">
+        <div class="text-xl font-bold mb-6 tracking-tighter uppercase">Radiant<span class="text-primary">AI</span></div>
+        
+        <div class="mb-8 p-3 bg-emerald-600/10 border border-emerald-600/30 rounded-lg">
+            <p class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold mb-1">Authenticated Patient</p>
+            <p class="text-xs font-bold">{{session.name}}</p>
+            <p class="text-[9px] text-emerald-500/70 capitalize">{{session.role}}</p>
+        </div>
+
+        <nav class="space-y-1 flex-1">
+            <a href="/chest" class="flex items-center gap-3 bg-primary/20 text-white p-3 rounded-lg font-bold border-l-4 border-primary text-xs">DIAGNOSTIC: Chest</a>
+            <a href="/bone" class="flex items-center gap-3 text-slate-500 hover:text-white p-3 rounded-lg transition text-xs">DIAGNOSTIC: Bone</a>
+        </nav>
+
+        <a href="/logout" class="text-red-400 text-xs hover:underline mt-auto">Logout</a>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="flex-1 p-12">
+        <div class="max-w-4xl mx-auto">
+            <header class="mb-12">
+                <h1 class="text-5xl font-black mb-2 tracking-tight">Chest AI Diagnostics</h1>
+                <p class="text-slate-400">Multi-doctor assigned diagnostic bundle for pulmonary health.</p>
+            </header>
+
+            <form action="/predict" method="POST" enctype="multipart/form-data" class="bg-dark border border-white/5 p-8 rounded-3xl shadow-2xl">
+                <input type="hidden" name="mode" value="chest">
+                
+                <div class="grid grid-cols-2 gap-8 mb-10">
+                    <div class="space-y-4">
+                        <label class="block text-[10px] uppercase font-bold text-slate-500 tracking-widest">Target Consultant</label>
+                        <select name="doctor_id" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl focus:outline-none focus:border-primary">
+                            {% for doc in doctors %}
+                            <option value="{{doc.id}}">{{doc.name}} — {{doc.specialization}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="space-y-4">
+                        <label class="block text-[10px] uppercase font-bold text-slate-500 tracking-widest">Radiology Image</label>
+                        <input type="file" name="file" required class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-primary/20 file:text-primary file:font-bold hover:file:bg-primary/30">
+                    </div>
+                </div>
+
+                <button class="w-full bg-primary py-4 rounded-2xl text-lg font-black hover:scale-[1.02] transition shadow-lg shadow-primary/20">Initialize Diagnostic Scan</button>
+            </form>
+
+            <!-- RESULTS (IF PRESENT) -->
+            {% if result %}
+            <div class="mt-12 bg-white/5 border border-white/10 p-8 rounded-3xl grid grid-cols-2 gap-10">
+                <div>
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">AI Interpretation</h3>
+                    <div class="mb-6">
+                        <p class="text-[10px] text-slate-400 uppercase">Detection Result</p>
+                        <p class="text-4xl font-black text-blue-400 leading-tight uppercase">{{result}}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 uppercase">Analysis Confidence</p>
+                        <p class="text-2xl font-bold">{{confidence}}%</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Visual Localization (XAI)</h3>
+                    <img src="/{{heatmap}}" class="w-full rounded-2xl border border-white/10 shadow-xl" alt="Heatmap">
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

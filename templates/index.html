@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadiantAI | Clinical Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1d4ed8' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#081018] text-white font-sans">
+    <!-- NAVBAR -->
+    <header class="flex justify-between items-center px-10 py-6">
+        <div class="text-xl font-bold tracking-tighter">RADIANT<span class="text-primary text-2xl">AI</span></div>
+        <nav class="space-x-8 text-sm text-slate-300 flex items-center">
+            <div class="flex items-center gap-4 mr-4">
+                {% if session.role == 'doctor' %}
+                <span class="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold border border-blue-600/30 uppercase">
+                    Consultant: {{session.name}}
+                </span>
+                {% elif session.role == 'patient' %}
+                <span class="bg-emerald-600/20 text-emerald-400 px-3 py-1 rounded-full text-[10px] font-bold border border-emerald-600/30 uppercase">
+                    Patient: {{session.name}}
+                </span>
+                {% endif %}
+            </div>
+            
+            <a href="/pharmacy" class="hover:text-white transition">E-Pharmacy</a>
+            
+            {% if session.name %}
+                {% if session.role == 'doctor' %}
+                <a href="/doctor" class="bg-primary px-5 py-2 rounded-lg text-white font-bold">Dashboard</a>
+                {% else %}
+                <a href="/patient/prescriptions" class="hover:text-white transition">Prescriptions</a>
+                {% endif %}
+                <a href="/logout" class="text-red-400 border border-red-400/20 px-3 py-1.5 rounded-lg hover:bg-red-400/10 transition">Logout</a>
+            {% else %}
+                <a href="/login" class="bg-primary px-5 py-2 rounded-lg text-white font-bold">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <main class="max-w-7xl mx-auto px-10 py-20 grid grid-cols-2 items-center gap-10">
+        <div>
+            <p class="text-primary font-bold tracking-widest text-sm mb-4 uppercase">Clinical Governance System</p>
+            <h1 class="text-7xl font-black mb-6 leading-none">Diagnostic Intelligence.<br><span class="text-slate-500 underline decoration-primary">Architected for Trust.</span></h1>
+            <p class="text-slate-400 text-lg mb-10 max-w-lg">Zero-trust medical infrastructure combining AI diagnostics with Shamir's Secret Sharing and immutable audit ledgers.</p>
+            
+            <div class="flex gap-4">
+                <a href="/chest" class="bg-white text-black px-8 py-4 rounded-xl font-bold hover:bg-slate-200 transition">Analyze Chest Scan</a>
+                <a href="/bone" class="bg-slate-800 text-white px-8 py-4 rounded-xl font-bold border border-slate-700 hover:bg-slate-700 transition">Verify Bone Scan</a>
+            </div>
+        </div>
+        
+        <div class="relative">
+            <div class="absolute -inset-1 bg-gradient-to-r from-primary to-blue-600 rounded-3xl blur opacity-25"></div>
+            <div class="relative bg-[#0c1622] border border-white/10 p-8 rounded-3xl aspect-square flex flex-col justify-center items-center">
+                <div class="text-slate-500 uppercase tracking-tighter text-[10px] mb-4">Sentinel Security Active</div>
+                <div class="w-full h-full bg-slate-900/50 rounded-2xl border border-white/5 flex items-center justify-center overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1516062423079-7ca13cdc7f5a?auto=format&fit=crop&q=80&w=1000" class="opacity-40 grayscale" alt="Medical Scan">
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

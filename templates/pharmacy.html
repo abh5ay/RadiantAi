@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Pharmacy Marketplace | RadiantAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#081018] text-white font-sans">
+    
+    <!-- NAVBAR -->
+    <header class="flex justify-between items-center px-10 py-6 bg-slate-900 shadow-xl">
+        <div class="text-xl font-bold tracking-tighter">RADIANT<span class="text-blue-500">AI</span> <span class="text-xs uppercase text-slate-500 ml-2">Marketplace</span></div>
+        <nav class="space-x-8 text-sm flex items-center">
+            <a href="/" class="hover:text-blue-400 transition">Main Terminal</a>
+            <div class="bg-blue-600 px-4 py-2 rounded-lg font-bold">Marketplace</div>
+            <a href="/logout" class="text-red-400">Logout</a>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-10 py-12">
+        <header class="mb-12">
+            <h1 class="text-4xl font-black mb-2">Pharmacy Marketplace</h1>
+            <p class="text-slate-400">Secure medication procurement with prescription verification.</p>
+        </header>
+
+        <!-- PRODUCT GRID -->
+        <div class="grid grid-cols-4 gap-8">
+            {% for prod in products %}
+            <div class="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden hover:border-blue-500/50 transition flex flex-col">
+                <div class="h-40 bg-slate-800 flex items-center justify-center text-4xl">
+                    {{prod.image_url}}
+                </div>
+                <div class="p-6 flex-1">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-lg">{{prod.name}}</h3>
+                        <p class="text-blue-400 font-bold font-mono">${{prod.price}}</p>
+                    </div>
+                    <p class="text-[10px] uppercase text-slate-500 mb-4">{{prod.manufacturer}}</p>
+                    <p class="text-slate-400 text-xs line-clamp-2 mb-6">{{prod.description}}</p>
+                    
+                    {% if prod.requires_prescription %}
+                    <div class="bg-amber-600/10 text-amber-500 text-[9px] uppercase font-bold p-2 rounded-lg text-center mb-4 border border-amber-600/20">
+                        Prescription Required
+                    </div>
+                    {% endif %}
+                    
+                    <button class="w-full bg-blue-600 p-3 rounded-xl text-xs font-bold hover:bg-blue-500 transition mt-auto">Add to Cart</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultant Command Center | Sentinel SP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#1d4ed8', dark: '#0c1622' },
+                    fontFamily: { mono: ['JetBrains Mono', 'monospace'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#081018] text-white font-sans flex min-h-screen">
+    
+    <!-- SIDEBAR -->
+    <aside class="w-72 bg-dark border-r border-white/5 p-8 flex flex-col">
+        <div class="text-xl font-bold mb-10 tracking-tighter">RADIANT<span class="text-primary">AI</span></div>
+        
+        <div class="mb-10 p-4 bg-blue-600/10 border border-blue-600/20 rounded-xl">
+            <p class="text-[10px] uppercase font-bold text-blue-400 mb-1">Authenticated Consultant</p>
+            <p class="text-sm font-bold">{{session.name}}</p>
+            <p class="text-[10px] text-blue-500/70">{{session.role|upper}} ID: {{session.doc_id}}</p>
+        </div>
+
+        <nav class="space-y-4 flex-1">
+            <a href="#" class="flex items-center gap-3 text-primary font-bold bg-blue-600/10 p-3 rounded-lg border-l-4 border-primary">
+                Patient Queue
+            </a>
+            <a href="#" class="flex items-center gap-3 text-slate-400 hover:text-white p-3 transition text-sm">
+                Case Archives
+            </a>
+            <a href="#" class="flex items-center gap-3 text-slate-400 hover:text-white p-3 transition text-sm">
+                Audit Ledger
+            </a>
+            <a href="#" class="flex items-center gap-3 text-slate-400 hover:text-white p-3 transition text-sm">
+                Security Hub
+            </a>
+        </nav>
+
+        <a href="/logout" class="text-red-400 text-sm hover:underline mt-auto">System Logout</a>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="flex-1 p-10 overflow-y-auto">
+        <header class="flex justify-between items-end mb-12">
+            <div>
+                <h1 class="text-4xl font-black">Clinical Command Center</h1>
+                <p class="text-slate-400">Assigned diagnostics and case governance under Sentinel Protocol.</p>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] text-slate-500 font-mono">NODE_STATUS: SECURE</p>
+                <p class="text-[10px] text-slate-500 font-mono">SP_ENCRYPTION_ACTIVE: YES</p>
+            </div>
+        </header>
+
+        <!-- PATIENT LIST -->
+        <section class="mb-16">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-6">Assigned Cases</h2>
+            <div class="bg-dark/50 border border-white/5 rounded-2xl overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-white/5 text-[10px] uppercase tracking-tighter text-slate-400">
+                        <tr>
+                            <th class="p-4">Patient</th>
+                            <th class="p-4">Age/Sex</th>
+                            <th class="p-4">Diagnostic</th>
+                            <th class="p-4">Result</th>
+                            <th class="p-4">Confidence</th>
+                            <th class="p-4 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        {% for p in patients %}
+                        <tr class="border-t border-white/5 hover:bg-white/[0.02]">
+                            <td class="p-4 font-bold">{{p.patient_name}}</td>
+                            <td class="p-4 text-slate-400">{{p.age}} / {{p.gender}}</td>
+                            <td class="p-4 text-blue-400 font-bold uppercase text-[10px]">{{p.scan_type}}</td>
+                            <td class="p-4">
+                                <span class="bg-slate-800 px-2 py-1 rounded-md text-xs">{{p.result}}</span>
+                            </td>
+                            <td class="p-4 text-slate-400 font-mono text-xs">{{p.confidence}}%</td>
+                            <td class="p-4 text-right">
+                                <a href="/prescribe/{{p.id}}" class="text-primary hover:underline font-bold">PRESCRIBE</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- LOG GROUPS -->
+        <div class="grid grid-cols-2 gap-10">
+            <!-- AUDIT LEDGER -->
+            <section>
+                <h2 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-6">Sentinel Audit Ledger</h2>
+                <div class="bg-[#04080c] p-6 rounded-2xl border border-white/5 font-mono text-[10px] space-y-3 h-[400px] overflow-y-auto">
+                    {% for l in ledger %}
+                    <div class="border-b border-white/5 pb-2">
+                        <p class="text-slate-500">{{l.timestamp}}</p>
+                        <p class="text-blue-400">{{l.event}}</p>
+                        <p class="text-slate-600 text-[8px] truncate">HASH: {{l.current_hash}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- SECURITY LOGS -->
+            <section>
+                <h2 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-6">Node Security Hub</h2>
+                <div class="bg-[#0c1622] rounded-2xl border border-white/5 overflow-hidden">
+                    {% for s in sec_logs %}
+                    <div class="p-4 border-b border-white/5 flex justify-between items-center hover:bg-white/[0.02]">
+                        <div>
+                            <p class="text-[10px] font-bold text-red-400 uppercase tracking-tighter">{{s.action}}</p>
+                            <p class="text-[9px] text-slate-500">Node: {{s.ip}}</p>
+                        </div>
+                        <p class="text-[9px] text-slate-600 font-mono">{{s.timestamp}}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

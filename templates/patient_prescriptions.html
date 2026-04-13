@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Clinical Records | RadiantAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#081018] text-white">
+    
+    <header class="p-10 flex justify-between items-center max-w-7xl mx-auto">
+        <div class="text-xl font-black">RADIANT<span class="text-primary">AI</span></div>
+        <a href="/" class="text-sm text-slate-400">Back to Terminal</a>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-10 py-12">
+        <h1 class="text-5xl font-black mb-12">Medical Prescriptions</h1>
+
+        <div class="grid grid-cols-1 gap-6">
+            {% for pr in prescriptions %}
+            <div class="bg-[#0c1622] border border-white/5 p-8 rounded-3xl flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] text-blue-400 font-bold uppercase mb-2">Prescription ID: {{pr.prescription_id}}</p>
+                    <h3 class="text-2xl font-bold mb-1">{{pr.diagnosis}}</h3>
+                    <p class="text-sm text-slate-400 font-mono italic">Consultant: {{pr.doctor_name}}</p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="/buy_prescription/{{pr.prescription_id}}" class="bg-blue-600 px-6 py-3 rounded-xl font-bold hover:bg-blue-500 transition">View and Buy</a>
+                </div>
+            </div>
+            {% endfor %}
+            
+            {% if not prescriptions %}
+            <div class="text-center py-20 bg-slate-900/50 rounded-3xl border border-dashed border-white/10">
+                <p class="text-slate-500 italic">No prescriptions found in your encrypted electronic health record.</p>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+</body>
+</html>
