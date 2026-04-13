@@ -1,0 +1,22 @@
+# Virtual Environments
+ai_env/
+venv/
+.env
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Large Backups & Junk
+*.zip
+*.log
+.DS_Store
+
+# Medical Database (Local Version)
+medical.db
+
+# Static Uploads (Except .gitkeep)
+static/uploads/*
+!static/uploads/.gitkeep
